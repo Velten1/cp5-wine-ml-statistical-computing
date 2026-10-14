@@ -1,4 +1,4 @@
-"""Gera o notebook de ML e o executa para manter resultados revisáveis."""
+"""Geração e execução da análise de agrupamento do dataset WINES."""
 from pathlib import Path
 import nbformat as nbf
 from nbclient import NotebookClient
@@ -22,7 +22,7 @@ md('''
 | João Vitor Fernandes Gomes | 573882 |
 | Murilo de Oliveira Moreira | 573534 |
 
-### 1. Introdução — item a)
+### 1. Introdução
 O problema é encontrar vinhos com perfis químicos semelhantes sem fornecer
 seus cultivares ao algoritmo. A solução usa as 13 medições químicas, padronização
 e K-means. Comparamos números de grupos pelo Elbow e pela silhueta e descrevemos
@@ -56,7 +56,7 @@ print(f"scikit-learn: {sklearn.__version__}; semente: {SEED}")
 display(df.head())
 ''')
 md('''
-### 2. Pré-processamento — item b)
+### 2. Pré-processamento
 `Wine` identifica o cultivar: incluí-la nas distâncias daria ao algoritmo a
 resposta que ele deveria descobrir. Por isso, ela fica fora do ajuste e da escolha
 de k. A comparação com cultivar aparece apenas no final, como diagnóstico.
@@ -93,7 +93,7 @@ display(pd.DataFrame({"Média após padronizar": X_padronizado.mean(axis=0),
 # do conjunto completo; não interpretamos os resultados como desempenho de teste.
 ''')
 md('''
-### 3. Número de grupos: Elbow e Silhueta — item d)
+### 3. Número de grupos: Elbow e Silhueta
 No Elbow, observamos a inércia (soma das distâncias quadráticas até os centroides).
 Ela sempre cai com k: procuramos uma mudança de inclinação, não o menor valor.
 Na silhueta, cada vinho é comparado ao próprio grupo e ao grupo vizinho; valores
@@ -134,7 +134,7 @@ display(Markdown(f"**Escolha pela silhueta:** k = {k_escolhido}, score = "
                  "não demonstra um número universal de tipos de vinho."))
 ''')
 md('''
-### 4. Ajuste final do K-means — item c)
+### 4. Ajuste final do K-means
 **Leitura do Elbow:** a inércia cai de 1658,76 (k=2) para 1277,93 (k=3),
 redução de 22,96%. De k=3 para k=4, a queda passa a 8,03%, indicando
 um cotovelo próximo de k=3. Isso converge com a maior silhueta média,
@@ -165,7 +165,7 @@ assert np.allclose(centroides, resultado.groupby("Grupo")[X.columns].mean())
 display(centroides.round(3))
 ''')
 md('''
-### 5. Perfis químicos e interpretação — item e)
+### 5. Perfis químicos e interpretação
 Comparamos as médias, medianas e dispersões na escala original. `Malic.acid`
 mede um componente da acidez: maior concentração de ácido málico não equivale
 necessariamente a menor pH ou maior acidez total. A unidade desse atributo não
@@ -245,8 +245,8 @@ print(f"PCA: duas componentes retêm {pca.explained_variance_ratio_.sum():.1%} d
 print(f"Vinhos com silhueta negativa: {(silhuetas < 0).sum()} de {len(df)}.")
 ''')
 md('''
-### 7. Comparação externa opcional com os cultivares
-Só agora usamos `Wine`. A tabela cruza os grupos descobertos e as classes
+### 7. Comparação com os cultivares
+Usamos `Wine` exclusivamente na comparação externa dos resultados. A tabela cruza os grupos descobertos e as classes
 conhecidas; os números dos grupos não precisam coincidir com os cultivares.
 O índice Rand ajustado (ARI) compara as duas partições sem depender dessa
 numeração. Ele é um diagnóstico adicional, não foi usado para escolher k e
@@ -260,7 +260,7 @@ ari = adjusted_rand_score(y_cultivar, grupos)
 print(f"ARI entre agrupamento e cultivares: {ari:.4f}")
 ''')
 md('''
-### 8. Conclusão, limitações e próximos passos
+### 8. Conclusão e limitações
 **Resultado:** escolhemos três grupos com apoio do Elbow e da silhueta.
 O grupo 1 reúne 65 vinhos, com álcool médio de 12,25% e ácido málico médio
 de 1,90; o grupo 2 reúne 51 vinhos, com 13,13% e 3,31; o grupo 3 reúne
@@ -281,8 +281,7 @@ Os resultados descrevem este dataset e não comprovam generalização para
 vinhos de outras regiões. Como extensão, seria possível avaliar estabilidade
 por reamostragem e comparar outros métodos de agrupamento.
 
-**Fontes:** enunciado Checkpoint 5; CSV distribuído no repositório do grupo,
-originalmente disponibilizado em https://gist.github.com/tijptjik/9408623.
+**Referências:** dataset WINES: https://gist.github.com/tijptjik/9408623.
 Documentação: https://scikit-learn.org/stable/modules/clustering.html#k-means
 e https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html.
 ''')

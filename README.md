@@ -1,10 +1,12 @@
-# Checkpoint 5 — Statistical Computing e Machine Learning
+# Checkpoint 5 — Análise de vinhos
 
-**FIAP · Tecnólogo em Inteligência Artificial · 2º Semestre**
-Parte 1: Análise Exploratória, Descritiva e Probabilística do dataset **WINES** (Python)
+**FIAP · Tecnólogo em Inteligência Artificial · 2º semestre**
 
-Parte 2: Agrupamento com **K-means**, padronização das 13 medições químicas,
-seleção de k por Elbow e silhueta e interpretação dos perfis dos grupos.
+**Statistical Computing with R & Python · Machine Learning & Modelling**
+
+Analisamos o dataset WINES por meio de estatística descritiva, modelos
+probabilísticos e agrupamento com K-means. O conjunto contém 178 vinhos,
+13 medições químicas e a identificação de três cultivares.
 
 ## Integrantes
 
@@ -16,57 +18,71 @@ seleção de k por Elbow e silhueta e interpretação dos perfis dos grupos.
 | João Vitor Fernandes Gomes | 573882 |
 | Murilo de Oliveira Moreira | 573534 |
 
-## Conteúdo do repositório
+## Análise estatística
 
-| Arquivo | Descrição |
+Estudamos o teor alcoólico (`Alcohol`) e a concentração de ácido málico
+(`Malic.acid`). Para cada variável, calculamos distribuições de frequência,
+medidas de tendência central, dispersão e quartis, com histogramas, ogivas e
+boxplots. Comparamos modelos probabilísticos e suas estimativas com as
+frequências observadas na amostra.
+
+O teor alcoólico apresenta média de aproximadamente 13,00% e baixa dispersão
+relativa. O ácido málico apresenta assimetria à direita e maior dispersão.
+A Normal e a Log-Normal são utilizadas como aproximações para os eventos
+analisados, com suas limitações discutidas no notebook.
+
+## Agrupamento com K-means
+
+Excluímos a coluna `Wine` do ajuste e padronizamos as 13 medições químicas.
+Comparamos a inércia pelo método Elbow e a silhueta média para selecionar
+o número de grupos. A solução com três grupos apresentou silhueta de 0,2849.
+
+| Grupo | Vinhos | Teor alcoólico médio (% vol.) | Ácido málico médio* |
+|---|---:|---:|---:|
+| 1 | 65 | 12,25 | 1,90 |
+| 2 | 51 | 13,13 | 3,31 |
+| 3 | 62 | 13,68 | 2,00 |
+
+O grupo 3 apresenta maior teor alcoólico médio, enquanto o grupo 2 tem maior
+concentração média de ácido málico. A PCA é utilizada somente para visualizar
+os grupos; o K-means utiliza as 13 medições padronizadas. Os identificadores
+correspondem à execução com `random_state=42`.
+
+\* Valores na escala do dataset. A fonte não documenta a unidade do ácido
+málico; essa variável não representa isoladamente acidez total ou pH.
+
+## Arquivos
+
+| Arquivo | Conteúdo |
 |---|---|
-| `CP5_Statistical_Computing_Wine.ipynb` | Notebook com todas as células **executadas** e código **comentado** com interpretações |
-| `CP5_Machine_Learning_Wine.ipynb` | Notebook de ML com pré-processamento, K-means, Elbow, silhueta e perfis químicos |
-| `preparar_ml.py` | Gera e executa novamente o notebook de ML |
-| `CP5_Integrantes.pdf` | Identificação dos cinco integrantes, com nomes completos e RMs |
-| `wine.csv` | Dataset WINES (versão GitHub gist — 178 vinhos, 13 medições químicas + cultivar) |
-| `requirements.txt` | Bibliotecas necessárias |
+| [CP5_Statistical_Computing_Wine.ipynb](CP5_Statistical_Computing_Wine.ipynb) | Análises exploratória, descritiva e probabilística |
+| [CP5_Machine_Learning_Wine.ipynb](CP5_Machine_Learning_Wine.ipynb) | Pré-processamento, K-means, seleção de k e interpretação dos grupos |
+| [CP5_Integrantes.pdf](CP5_Integrantes.pdf) | Identificação dos integrantes |
+| `wine.csv` | Dataset utilizado nas análises |
+| `requirements.txt` | Dependências do ambiente Python |
+| `preparar_ml.py` | Geração e execução do notebook de agrupamento |
 
-## Variáveis analisadas
+## Execução
 
-- **Alcohol** — teor alcoólico (% vol.)
-- **Malic.acid** — ácido málico (g/L), indicador de acidez
-
-## Itens atendidos
-
-| Item | Onde está no notebook |
-|---|---|
-| **a)** Tabela de Distribuição de Frequências (Sturges, fi, fri, Fi, Fri, xi) + Histograma, Polígono de Frequências e Ogiva | Seção 3 |
-| **b)** Tendência Central (média, mediana, moda bruta e de Czuber), Dispersão (amplitude, variância, desvio-padrão, CV, DMA, IQR) e Separatrizes (quartis, decis, cercas de Tukey, boxplot) | Seção 4 |
-| **c)** Distribuições de Probabilidade (Normal para o álcool, Log-Normal para o ácido málico, com testes de aderência e QQ-plot) + cálculos probabilísticos (teórico × empírico, Binomial, TCL, probabilidade condicional) | Seção 5 |
-
-## Como executar
+Na pasta do projeto:
 
 ```bash
 pip install -r requirements.txt
-jupyter notebook CP5_Statistical_Computing_Wine.ipynb
+jupyter notebook
 ```
 
-Para ML, abra `CP5_Machine_Learning_Wine.ipynb` no Jupyter e execute as células
-em ordem, a partir da pasta do repositório. Para gerar e executar automaticamente:
+Os notebooks contêm as saídas das células executadas. A reprodução das análises
+utiliza o arquivo `wine.csv` na mesma pasta dos notebooks.
+
+O notebook de agrupamento também pode ser gerado e executado com:
 
 ```bash
 python preparar_ml.py
 ```
 
-A coluna `Wine` não participa do ajuste nem da seleção de k. A PCA é usada
-somente na visualização; o agrupamento usa as 13 medições padronizadas.
+## Referências
 
-## Origem dos arquivos
-
-A análise estatística e o dataset foram mantidos a partir do [repositório do grupo](https://github.com/IgaoPrograma/cp5-wine-statistical-computing).
-Este repositório reúne essa parte, o notebook de Machine Learning e o PDF de integrantes.
-
-## Entrega
-
-O enunciado pede PDF com nomes completos e RMs dos integrantes e link do
-repositório com código comentado (notebook com células executadas, `.py` ou `.r`).
-Os prazos das disciplinas são distintos e devem ser conferidos nas atribuições
-do Teams. Conforme orientação atual da disciplina, ML não exige apresentação oral.
-
-O notebook também funciona com a versão do dataset do Kaggle (`harrywang/wine-dataset-for-clustering`): os nomes das colunas são padronizados automaticamente na leitura. A análise por cultivar (seções 4.5 e 5.3) só é exibida quando o arquivo contém a coluna `Wine`.
+- [Dataset WINES](https://gist.github.com/tijptjik/9408623)
+- [Análise estatística do grupo](https://github.com/IgaoPrograma/cp5-wine-statistical-computing)
+- [K-means — scikit-learn](https://scikit-learn.org/stable/modules/clustering.html#k-means)
+- [Silhouette score — scikit-learn](https://scikit-learn.org/stable/modules/generated/sklearn.metrics.silhouette_score.html)
